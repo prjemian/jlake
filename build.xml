@@ -1,0 +1,245 @@
+<?xml version="1.0" ?>
+
+<!--
+ ########### SVN repository information ###################
+ # $Date$
+ # $Author$
+ # $Revision$
+ # $URL$
+ # $Id$
+ ########### SVN repository information ###################
+-->
+
+<project name="jlake" default="jar">
+	<description>
+		Java version of Lake desmearing software for small-angle scattering
+	</description>
+
+	<!-- set global properties for this build -->
+	<property name="version" value="0.6-DEVEL" />
+	<property name="src.dir" location="src" />
+	<property name="bin.dir" location="bin" />
+	<property name="lib.dir" location="lib" />
+	<property name="lic.dir" location="LICENSES" />
+	<property name="dist.dir" location="dist" />
+	<property name="doc.dir" location="doc" />
+	<property name="res.dir" location="resources" />
+	<property name="src.tests" location="tests" />
+	<property name="bin.tests" location="bin-tests" />
+
+	<property name="project.master" value="gov.anl.aps.small_angle"/>
+	<property name="project.name.full" 
+		value="${project.master}.${ant.project.name}"/>
+	<property name="project.main.class" 
+		value="${project.name.full}.Desmear"/>
+	<property name="javac.debug.attrs" 
+		value="lines,vars,source"/>
+	<property name="target.jar.root" 
+		value="${dist.dir}/${ant.project.name}"/>
+
+	<path id="compile.classpath">
+	  <fileset dir="lib">
+	    <include name="*.jar"/>
+	  </fileset>
+	</path>
+	<property name="compile.classpath.contents" 
+		refid="compile.classpath" />
+	<path id="ant.run.classpath">
+		<path refid="compile.classpath" />
+		<path path="${bin.dir}" />
+	</path>
+
+	<!-- ================================= 
+          target:	 init
+         ================================= -->
+	<target name="init" description="first step">
+		<echo>Initializing ...</echo>
+		<tstamp />
+		<!-- Create the time stamp -->
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${doc.dir}" />
+	</target>
+
+	<!-- ================================= 
+          target:	buildnumber
+         ================================= -/->
+	<target name="buildnumber" 
+		description="Increment build number">
+		<echo>Incrementing build number ...</echo>
+		<buildnumber />
+		<propertyfile file="build.number" />
+		<echo>New build number: ${build.number}</echo>
+		<!-/- echoproperties / -/->
+	</target>
+	-->
+
+	<!-- ================================= 
+          target:	libraries
+         ================================= -->
+	<target name="libraries" 
+		description="Install all libraries" 
+		depends="init">
+		<echo>Installing libraries ...</echo>
+		<unzip dest="${bin.dir}">
+			<fileset dir="${lib.dir}" id="id">
+				<include name="**/*.jar" />
+			</fileset>
+			<patternset>
+				<exclude name="META-INF/" />
+			</patternset>
+		</unzip>
+	</target>
+
+	<!-- ================================= 
+          target:	licenses
+         ================================= -->
+	<target name="licenses" 
+		description="Copy all software licenses" 
+		depends="init">
+		<echo>Copying licenses ...</echo>
+		<copy todir="${bin.dir}/LICENSES/" verbose="true">
+			<fileset dir="${lic.dir}" excludes="**/.svn" />
+		</copy>
+	</target>
+
+	<!-- ================================= 
+          target:	 resources
+         ================================= -->
+	<target name="resources" 
+		description="Copy all resources">
+		<echo>Copying resources ...</echo>
+		<copy todir="${bin.dir}/resources/" verbose="true">
+			<fileset dir="${res.dir}" excludes="**/.svn" />
+		</copy>
+	</target>
+
+	<!-- ================================= 
+          target:	 compile
+         ================================= -->
+	<target name="compile" 
+		description="Compilation target" 
+		depends="init">
+		<echo>Compiling ...</echo>
+		<javac 
+			srcdir="${src.dir}" 
+			destdir="${bin.dir}"
+			debug="true"
+			debuglevel="${javac.debug.attrs}"
+			verbose="false">
+			<classpath path="${compile.classpath.contents}" />
+		</javac>
+	</target>
+
+	<!-- ================================= 
+          target:	 jar
+         ================================= -->
+	<target name="jar" 
+		description="Packaging" 
+		depends="compile, licenses, libraries, resources">
+		<echo>Packaging ...</echo>
+		<property name="target.jar" 
+			value="${target.jar.root}-${DSTAMP}.jar"/>
+		<jar jarfile="${target.jar}" 
+			basedir="${bin.dir}" 
+			index="true">
+			<manifest>
+				<attribute 
+					name="Main-Class" 
+					value="${project.main.class}" />
+			</manifest>
+		</jar>
+		<!-- <echoproperties /> -->
+	</target>
+
+	<!-- ================================= 
+          target:	 javadoc
+         ================================= -->
+	<target name="javadoc" description="Documentation" depends="init">
+		<echo>Documentation ...</echo>
+		<javadoc sourcepath="${src.dir}" destdir="${doc.dir}">
+			<classpath refid="compile.classpath" />
+		</javadoc>
+		<property name="target.jar.javadoc" 
+			value="${target.jar.root}-${DSTAMP}-javadoc.jar"/>
+		<jar jarfile="${target.jar.javadoc}" basedir="${doc.dir}" />
+	</target>
+
+	<!-- ================================= 
+          target:	 sources
+         ================================= -->
+	<target name="sources" description="source package" depends="init">
+		<echo>Source Packaging ...</echo>
+		<property name="target.jar.sources" 
+			value="${target.jar.root}-${DSTAMP}-sources.jar"/>
+		<jar jarfile="${target.jar.sources}" basedir="${src.dir}" />
+	</target>
+
+	<!-- ================================= 
+          target:	 clean
+         ================================= -->
+	<target name="clean" description="clean up">
+		<echo>Cleaning ...</echo>
+		<!-- Delete the ${build}, ${dist}, and ${docs} directory trees -->
+		<delete dir="${bin.dir}" />
+		<delete dir="${dist.dir}" />
+		<delete dir="${doc.dir}" />
+	</target>
+
+	<!-- ================================= 
+          target:	 all
+         ================================= -->
+	<target name="all" description="build jar, docs, and sources" 
+		depends="jar, javadoc, sources" />
+
+	<!-- ================================= 
+          target:	 rebuild
+         ================================= -->
+	<target name="rebuild" description="rebuild everything" 
+		depends="clean, all" />
+
+	<!-- 
+		TODO
+		http://ant.apache.org/manual/OptionalTasks/junit.html
+		See: "batchtest"
+	 -->
+	<!-- ================================= 
+          target:	 
+         ================================= -/->
+	<target name="junit-tests">
+		<echo>Running junit4 tests ...</echo>
+		<junit printsummary="yes" haltonfailure="yes">
+		  <classpath>
+		    <pathelement location="${bin.tests}"/>
+		    <pathelement path="${java.class.path}"/>
+		  </classpath>
+
+		  <formatter type="plain"/>
+
+		  <test name="my.test.TestCase" haltonfailure="no" outfile="result">
+		    <formatter type="xml"/>
+		  </test>
+
+		  <batchtest fork="yes" todir="${reports.tests}">
+		    <fileset dir="${src.tests}">
+		      <include name="**/*Test.java"/>
+		      <exclude name="**/AllTests.java"/>
+		    </fileset>
+		  </batchtest>
+		</junit>
+	</target>
+	-->
+
+	<!-- ================================= 
+          target: run.Desmear              
+         ================================= -->
+	<target name="run.Desmear" 
+    	depends="compile, resources" 
+    	description="runs the Desmear program">
+		<java 
+			classname="${project.name.full}.Desmear">
+			<classpath refid="ant.run.classpath"/>
+		</java>
+	</target>
+
+</project>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+########### SVN repository information ###################
+# $Date$
+# $Author$
+# $Revision$
+# $URL$
+# $Id$
+########### SVN repository information ###################
+ -->
+<desmearing 
+	version="1.0" 
+	xmlns="jlake-desmearing"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="jlake-desmearing desmearing.xsd">
+	<dataFile>/resources/jlake/test.xml</dataFile>
+	<extrapolation_form>flat background</extrapolation_form>
+	<x_start_extrapolation_evaluation unit="1/A">
+		0.08
+	</x_start_extrapolation_evaluation>
+	<iterations>10</iterations>
+	<iterative_weight_method>CorrectedI / SmearedI</iterative_weight_method>
+</desmearing>
+
