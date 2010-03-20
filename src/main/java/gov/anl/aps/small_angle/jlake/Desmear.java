@@ -41,7 +41,7 @@ public class Desmear {
 	private Smear smr;
 
 	/** directory containing resources files */
-	private static final String RES_DIR = "/resources/jlake/";
+	private static final String RES_DIR = "/jlake/";
 
 	/**
 	 * Constructor

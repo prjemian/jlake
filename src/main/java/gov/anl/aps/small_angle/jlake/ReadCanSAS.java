@@ -31,7 +31,9 @@ public class ReadCanSAS {
 
     private String xmlFile;
     private ArrayList<SASentry> entries;
-    private static final String RES_DIR = "/resources/jlake/";
+
+    /** directory containing resources files */
+	private static final String RES_DIR = "/jlake/";
 
     /**
      * Constructor
