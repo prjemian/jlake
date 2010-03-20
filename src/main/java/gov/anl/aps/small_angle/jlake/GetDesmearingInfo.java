@@ -73,7 +73,7 @@ public class GetDesmearingInfo {
 		"net.smallangles.cansas1d";
 
 	/** directory containing resources files */
-	private static final String RES_DIR = "/resources/jlake/";
+	private static final String RES_DIR = "/jlake/";
 
 	/** default value in XSD is not handled by JAXB */
 	private int entryIndex = 0;
