@@ -48,10 +48,10 @@ public class ExtrapolateConstant extends ExtrapolateFunction {
 		StatsRegisters sr = new StatsRegisters();
 		for (int i = 0; i < Qsas.length; i++) {
 			if (Qsas[i] >= qStart) {
-				sr.SwtAdd(Qsas[i], Isas[i], Idev[i]); /* weighted */
+				sr.swtAdd(Qsas[i], Isas[i], Idev[i]); /* weighted */
 			}
 		}
-		super.setConstant(sr.MeanY());
+		super.setConstant(sr.meanY());
 		super.setSlope(0);
 	}
 

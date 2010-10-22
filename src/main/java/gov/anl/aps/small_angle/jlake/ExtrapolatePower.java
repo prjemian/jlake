@@ -52,11 +52,11 @@ public class ExtrapolatePower extends ExtrapolateFunction {
 		StatsRegisters sr = new StatsRegisters();
 		for (int i = 0; i < Qsas.length; i++) {
 			if (Qsas[i] >= qStart) {
-				sr.SumAdd(Math.log(Qsas[i]), Math.log(Isas[i])); /* unweighted */
+				sr.sumAdd(Math.log(Qsas[i]), Math.log(Isas[i])); /* unweighted */
 			}
 		}
-		setScale(Math.exp(sr.LR_constant()));
-		setExponent(sr.LR_slope());
+		setScale(Math.exp(sr.lr_constant()));
+		setExponent(sr.lr_slope());
 	}
 
 	/**

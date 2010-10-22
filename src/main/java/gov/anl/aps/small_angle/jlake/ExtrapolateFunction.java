@@ -53,7 +53,7 @@ public class ExtrapolateFunction {
 	public void fitData(double[] Qsas, double[] Isas, double[] Idev, double qStart)
 	{
 		StatsRegisters sr = new StatsRegisters();
-		sr.SumClr();
+		sr.sumClr();
 		constant = 0;
 		slope = 0;
 	}

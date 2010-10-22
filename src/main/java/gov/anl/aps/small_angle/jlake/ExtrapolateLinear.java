@@ -49,11 +49,11 @@ public class ExtrapolateLinear extends ExtrapolateFunction {
 		StatsRegisters sr = new StatsRegisters();
 		for (int i = 0; i < Qsas.length; i++) {
 			if (Qsas[i] >= qStart) {
-				sr.SumAdd(Qsas[i], Isas[i]); /* unweighted */
+				sr.sumAdd(Qsas[i], Isas[i]); /* unweighted */
 			}
 		}
-		super.setConstant(sr.LR_constant());
-		super.setSlope(sr.LR_slope());
+		super.setConstant(sr.lr_constant());
+		super.setSlope(sr.lr_slope());
 	}
 
 	/**

@@ -51,11 +51,11 @@ public class ExtrapolatePorod extends ExtrapolateFunction {
 		for (int i = 0; i < Qsas.length; i++) {
 			if (Qsas[i] >= qStart) {
 				double q4 = Math.pow(Qsas[i], 4);
-				sr.SwtAdd(q4, Isas[i] * q4, Idev[i] * q4); /* weighted */
+				sr.swtAdd(q4, Isas[i] * q4, Idev[i] * q4); /* weighted */
 			}
 		}
-		setPorodConstant(sr.LR_constant());
-		setBackground(sr.LR_slope());
+		setPorodConstant(sr.lr_constant());
+		setBackground(sr.lr_slope());
 	}
 
 	/**

@@ -199,20 +199,20 @@ public class Desmear {
 	     *    i-1, i, i+1 and take the difference.  Add this to dz.
 	     */
 		StatsRegisters sr = new StatsRegisters();
-	    sr.SumAdd(x[0], z[0]);
-	    sr.SumAdd(x[1], z[1]);
-	    sr.SumAdd(x[2], z[2]);
-	    double intercept = sr.LR_constant();
-	    double slope = sr.LR_slope();
+	    sr.sumAdd(x[0], z[0]);
+	    sr.sumAdd(x[1], z[1]);
+	    sr.sumAdd(x[2], z[2]);
+	    double intercept = sr.lr_constant();
+	    double slope = sr.lr_slope();
 	    dz[0] += Math.abs(intercept + slope*x[0] - z[0]);
 	    dz[1] += Math.abs(intercept + slope*x[1] - z[1]);
 	    for (int i = 2; i < n-1; i++) {
-	    	sr.SumClr ();
-	    	sr.SumAdd(x[i-1], z[i-1]);
-	    	sr.SumAdd(x[i],   z[i]);
-	    	sr.SumAdd(x[i+1], z[i+1]);
-	    	intercept = sr.LR_constant();
-	    	slope = sr.LR_slope();
+	    	sr.sumClr ();
+	    	sr.sumAdd(x[i-1], z[i-1]);
+	    	sr.sumAdd(x[i],   z[i]);
+	    	sr.sumAdd(x[i+1], z[i+1]);
+	    	intercept = sr.lr_constant();
+	    	slope = sr.lr_slope();
 	    	double zNew = intercept + slope * x[i];
 	    	dz[i] += Math.abs(zNew - z[i]);
 	    }
