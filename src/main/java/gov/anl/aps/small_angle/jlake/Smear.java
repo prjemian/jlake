@@ -21,13 +21,13 @@ package gov.anl.aps.small_angle.jlake;
  */
 public class Smear {
 
-	private static double  sFinal = 1.0;	// to start evaluating the constants for extrapolation
-	private static String  extrapName = "flat background";		// model final data as a constant
-	private static ExtrapolateFunction  extrap;
-	private static double  fSlope;			// linear coefficient of data fit
-	private static double  fIntercept;		// constant coefficient of data fit
-	private static double[] Ismr;			// re-smeared intensity
-	private static double  slit_length = 1;	// slit length, as defined by Lake
+	private double  sFinal = 1.0;	// to start evaluating the constants for extrapolation
+	private String  extrapName = "flat background";		// model final data as a constant
+	private ExtrapolateFunction  extrap;
+	private double  fSlope;			// linear coefficient of data fit
+	private double  fIntercept;		// constant coefficient of data fit
+	private double[] Ismr;			// re-smeared intensity
+	private double  slit_length = 1;	// slit length, as defined by Lake
 
 	/**
 	 * 
@@ -43,6 +43,7 @@ public class Smear {
 	 */
 	public Smear(double qStart, String extrapForm, double slitLength) {
 		setSFinal( qStart );
+		extrap = new ExtrapolateFunction();
 		setExtrapName( extrapForm );
 		setSlit_length( slitLength );
 	}
@@ -60,7 +61,7 @@ public class Smear {
 	 * @return vector containing smeared intensities
 	 */
 	public double[] smear(double[] Qsas, double[] Isas, double[] Idev) {
-		chooseExtrapolation(extrapName);
+		extrap.select(extrapName);
 		// this was Prep() but not needed now
 		// Calculate the constants for an extrapolation fit from all the data that
 		// satisfy x(i) >= sFinal
@@ -90,26 +91,9 @@ public class Smear {
 	 * called after extrapolation fit
 	 */
 	public String reportFit() {
-		// System.out.println( extrap.equation() );
-		return extrap.equation();
+		return extrap.toString();
 	}
 
-	/**
-	 * selects the extrapolation class
-	 * @param mform
-	 */
-	private static void chooseExtrapolation(String form) {
-		if (form.compareTo("flat background") == 0) 
-			extrap = new ExtrapolateConstant(); 
-		if (form.compareTo("linear") == 0) 
-			extrap = new ExtrapolateLinear(); 
-		if (form.compareTo("power law") == 0) 
-			extrap = new ExtrapolatePower();
-		if (form.compareTo("power law + flat") == 0) 
-			extrap = new ExtrapolatePower();	// not implemented now
-		if (form.compareTo("Porod law") == 0) 
-			extrap = new ExtrapolatePorod(); 
-	}
 	/**
      *  Determine the "corrected" intensity at u = SQRT (x*x + y*y).
      *  Note that only positive values of "u" will be searched!
@@ -119,7 +103,7 @@ public class Smear {
 	 * @param iSAS
 	 * @return
 	 */
-	private static double lookupIsas(double q, double l, double[] qSAS,
+	private double lookupIsas(double q, double l, double[] qSAS,
 			double[] iSAS) {
 		double u = Math.sqrt(q*q + l*l); /* circularly symmetric */
 		BSearch search = new BSearch();
@@ -163,7 +147,7 @@ public class Smear {
 	 * @param y2
 	 * @return
 	 */
-	private static double powerInterpolate(double x, double x1, double y1, double x2,
+	private double powerInterpolate(double x, double x1, double y1, double x2,
 			double y2) {
 		double value = interpolate(Math.log(x), 
 				Math.log(x1), Math.log(y1), 
@@ -180,7 +164,7 @@ public class Smear {
 	 * @param y2
 	 * @return
 	 */
-	private static double interpolate(double x, double x1, double y1, double x2,
+	private double interpolate(double x, double x1, double y1, double x2,
 			double y2) {
 		return (y1 + (y2 - y1) * (x - x1) / (x2 - x1));
 	}
@@ -194,8 +178,107 @@ public class Smear {
 	 * @param x
 	 * @return (|x| <= slit_length) ? 1/(2*sLengt) : 0
 	 */
-	private static double Plengt(double x) {
+	private double Plengt(double x) {
 		return (Math.abs(x) > slit_length) ? 0.0 : 0.5 / slit_length;
+	}
+
+	/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
+	/**
+	 * @return the sFinal
+	 */
+	public double getSFinal() {
+		return sFinal;
+	}
+
+
+	/**
+	 * @param value the sFinal to set
+	 */
+	public void setSFinal(double value) {
+		sFinal = value;
+	}
+
+
+	/**
+	 * @return the extrapName
+	 */
+	public String getExtrapName() {
+		return extrapName;
+	}
+
+
+	/**
+	 * @param value the extrapName to set
+	 */
+	public void setExtrapName(String value) {
+		extrapName = value;
+		extrap.select(value);
+	}
+
+
+	/**
+	 * @return the fSlope
+	 */
+	public double getFSlope() {
+		return fSlope;
+	}
+
+
+	/**
+	 * @param value the fSlope to set
+	 */
+	public void setFSlope(double value) {
+		fSlope = value;
+	}
+
+
+	/**
+	 * @return the fIntercept
+	 */
+	public double getFIntercept() {
+		return fIntercept;
+	}
+
+
+	/**
+	 * @param value the fIntercept to set
+	 */
+	public void setFIntercept(double value) {
+		fIntercept = value;
+	}
+
+
+	/**
+	 * @return the ismr
+	 */
+	public double[] getIsmr() {
+		return Ismr;
+	}
+
+
+	/**
+	 * @param value the ismr to set
+	 */
+	public void setIsmr(double[] value) {
+		Ismr = value;
+	}
+
+
+	/**
+	 * @return the slit_length
+	 */
+	public double getSlit_length() {
+		return slit_length;
+	}
+
+
+	/**
+	 * @param value the slit_length to set
+	 */
+	public void setSlit_length(double value) {
+		slit_length = value;
 	}
 
 
@@ -268,104 +351,6 @@ public class Smear {
 		for (int i = 0; i < Qsas.length; i++)
 			System.out.printf("%g\t%g\t%g\n", Qsas[i], Isas[i], smrI[i]);
 		System.out.println("the end.");
-	}
-
-	/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
-
-	/**
-	 * @return the sFinal
-	 */
-	public double getSFinal() {
-		return sFinal;
-	}
-
-
-	/**
-	 * @param value the sFinal to set
-	 */
-	public void setSFinal(double value) {
-		sFinal = value;
-	}
-
-
-	/**
-	 * @return the extrapName
-	 */
-	public String getExtrapName() {
-		return extrapName;
-	}
-
-
-	/**
-	 * @param value the extrapName to set
-	 */
-	public void setExtrapName(String value) {
-		extrapName = value;
-	}
-
-
-	/**
-	 * @return the fSlope
-	 */
-	public double getFSlope() {
-		return fSlope;
-	}
-
-
-	/**
-	 * @param value the fSlope to set
-	 */
-	public void setFSlope(double value) {
-		fSlope = value;
-	}
-
-
-	/**
-	 * @return the fIntercept
-	 */
-	public double getFIntercept() {
-		return fIntercept;
-	}
-
-
-	/**
-	 * @param value the fIntercept to set
-	 */
-	public void setFIntercept(double value) {
-		fIntercept = value;
-	}
-
-
-	/**
-	 * @return the ismr
-	 */
-	public double[] getIsmr() {
-		return Ismr;
-	}
-
-
-	/**
-	 * @param value the ismr to set
-	 */
-	public void setIsmr(double[] value) {
-		Ismr = value;
-	}
-
-
-	/**
-	 * @return the slit_length
-	 */
-	public double getSlit_length() {
-		return slit_length;
-	}
-
-
-	/**
-	 * @param value the slit_length to set
-	 */
-	public void setSlit_length(double value) {
-		Smear.slit_length = value;
 	}
 
 }

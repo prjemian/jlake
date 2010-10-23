@@ -31,38 +31,38 @@ import net.smallangles.cansas1d.SASentryType.Run;
 
 /**
  * @author Pete Jemian
- * 
+ * TODO This looks like its predecessor C routine.  Make it be a Java class.
  */
 public class GetDesmearingInfo {
 
 	/** desmearing gov.anl.aps.small_angle.jlake.properties */
-	private static DesmearingType dt;
+	private DesmearingType dt;
 
 	/** SAS data (from cansas1d/1.0 XML file) */
-	private static SASrootType sasRoot;
+	private SASrootType sasRoot;
 
 	/** input Q */
-	private static double[] Qsas;
+	private double[] Qsas;
 
 	/** input I (slit-smeared) */
-	private static double[] Isas;
+	private double[] Isas;
 
 	/** input Idev (slit-smeared) */
-	private static double[] Idev;
+	private double[] Idev;
 
 	/** calculated I slit-smeared */
-	private static double[] Ismr;
+	private double[] Ismr;
 
 	/** calculated I desmeared */
-	private static double[] Idsm;
+	private double[] Idsm;
 
 	/** calculated Idev desmeared */
-	private static double[] IdsmDev;
+	private double[] IdsmDev;
 
 	/** to correct the collimation broadening 
 	 * (the whole point of this software!) 
 	 */
-	private static double   slit_length;
+	private double   slit_length;
 
 	/** package context for desmearing info JAXB support */
 	private static final String DESMEARING_PROPERTIES_PKG = 
@@ -89,8 +89,8 @@ public class GetDesmearingInfo {
 	 * @param xmlPropertyFile
 	 * @throws Throwable 
 	 */
-	public GetDesmearingInfo(String xmlPropertyFile) throws Throwable
-	{
+	public GetDesmearingInfo(String xmlPropertyFile) throws Throwable {
+		// TODO Doing too much in this constructor!
 		try {
 			dt = (DesmearingType) loadXML(
 					DESMEARING_PROPERTIES_PKG, xmlPropertyFile);
@@ -107,7 +107,7 @@ public class GetDesmearingInfo {
 		// load SAS data into memory
 		try {
 			sasRoot = (SASrootType) loadXML(
-					GetDesmearingInfo.CANSAS_JAXB, xmlDataFile);
+					CANSAS_JAXB, xmlDataFile);
 		} catch (JAXBException e) {
 			e.printStackTrace();
 			String msg = 
@@ -268,24 +268,10 @@ public class GetDesmearingInfo {
 	}
 
 	/**
-	 * @param dt the dt to set
-	 */
-	public void setDt(DesmearingType dt) {
-		GetDesmearingInfo.dt = dt;
-	}
-
-	/**
 	 * @return the sasRoot
 	 */
 	public SASrootType getSasRoot() {
 		return sasRoot;
-	}
-
-	/**
-	 * @param sasRoot the sasRoot to set
-	 */
-	public void setSasRoot(SASrootType sasRoot) {
-		GetDesmearingInfo.sasRoot = sasRoot;
 	}
 
 	/**
@@ -382,7 +368,7 @@ public class GetDesmearingInfo {
 	/**
 	 * @return the slit_length
 	 */
-	public static double getSlit_length() {
+	public double getSlit_length() {
 		return slit_length;
 	}
 
@@ -416,15 +402,14 @@ public class GetDesmearingInfo {
 		GetDesmearingInfo info;
 		try {
 			info = new GetDesmearingInfo(testFile);
-			if (info == null) {
-				System.out.println(
-						"Could not open info file: " 
-						+ testFile
-						);
-			} else {
+			//if (info == null) {
+			//	System.out.println("Could not open info file: " + testFile);
+			//	// Looks like null code here.  See next line of this message...
+			//	// TODO Doing too much in this constructor!
+			//} else {
 				info.inputReporter();
 				System.out.println("the end.");
-			}
+			//}
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
