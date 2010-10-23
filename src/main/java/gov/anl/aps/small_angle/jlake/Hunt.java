@@ -30,14 +30,14 @@ public class Hunt {
 		} else { 
 			// optimization: last solution may be near this one
 			inc = 1;
-			if (((ascnd == 1) & (x >= xx[jlo]))
-					| ((ascnd == 0) & (x <= xx[jlo]))) {
+			if (((ascnd == 1) && (x >= xx[jlo]))
+					|| ((ascnd == 0) && (x <= xx[jlo]))) {
 				// expand range adjusting jhi towards n
 				if (jlo == n)
 					return jlo;
 				jhi = jlo + 1;
-				while (((ascnd == 1) & (x >= xx[jhi]))
-						| ((ascnd == 0) & (x <= xx[jhi]))) {
+				while (((ascnd == 1) && (x >= xx[jhi]))
+						|| ((ascnd == 0) && (x <= xx[jhi]))) {
 					jlo = jhi;
 					inc += inc;
 					jhi = jlo + inc;
@@ -53,8 +53,8 @@ public class Hunt {
 				}
 				// expand range adjusting jlo towards 0
 				jhi = jlo--;
-				while ((ascnd == 1) & (x < xx[jlo])
-						| ((ascnd == 0) & (x > xx[jlo]))) {
+				while ((ascnd == 1) && (x < xx[jlo])
+						|| ((ascnd == 0) && (x > xx[jlo]))) {
 					jhi = jlo;
 					inc *= 2;
 					if (inc > jhi) {
@@ -66,8 +66,8 @@ public class Hunt {
 			}
 		}
 		while (jhi - jlo != 1) {
-			jm = (jhi + jlo) / 2;
-			if ((ascnd == 1) & (x > xx[jm]) | (ascnd == 0) & (x < xx[jm]))
+			jm = (jhi + jlo) >>> 1 ;
+			if ((ascnd == 1) && (x > xx[jm]) || (ascnd == 0) && (x < xx[jm]))
 				jlo = jm;
 			else
 				jhi = jm;

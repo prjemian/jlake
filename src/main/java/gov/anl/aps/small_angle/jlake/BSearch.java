@@ -13,8 +13,8 @@ public class BSearch {
 	// Search the array "x" for x(iLo) <= z < x(iHi)
 	// On exit, iLo and iHi will exactly bracket the datum
 	//    and iTest will be the same as iLo.
-	private static int iLo;
-	private static int iHi;
+	private int iLo;
+	private int iHi;
 
     // one constructor
 	public BSearch() {
@@ -22,9 +22,22 @@ public class BSearch {
     	iHi = -1;
     }
 
-	public int getIndex()
-	{
+	public int getIndex() {
 		return(iLo);
+	}
+
+	/**
+	 * @return the iLo
+	 */
+	public int getiLo() {
+		return iLo;
+	}
+
+	/**
+	 * @return the iHi
+	 */
+	public int getiHi() {
+		return iHi;
 	}
 
 	/**
@@ -52,10 +65,10 @@ public class BSearch {
 		while (z < x[iLo])
 			iLo /= 2;
 		while (z > x[iHi])         // expand up?
-			iHi = (iHi + 1 + NumPts) / 2;
+			iHi = (iHi + 1 + NumPts) >>> 1 ;
 		iTest = iHi;
 		while (iHi - iLo > 1) {
-			iTest = (iLo + iHi) / 2;
+			iTest = (iLo + iHi) >>> 1 ;
 			if (z >= x[iTest])
 				iLo = iTest;
 			else
@@ -74,8 +87,8 @@ public class BSearch {
 		System.out.println("  <target>" + target + "</target>");
 		System.out.println("  <result>" + result + "</result>");
 		System.out.println("  <index>"  + index  + "</index>");
-		System.out.println("  <iLo>"    + iLo    + "</iLo>");
-		System.out.println("  <iHi>"    + iHi    + "</iHi>");
+		System.out.println("  <iLo>"    + search.getiLo()    + "</iLo>");
+		System.out.println("  <iHi>"    + search.getiHi()    + "</iHi>");
 		System.out.println(" </areaXY>");
 	}
 
