@@ -1,14 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="example.xsl" ?>
-<!-- 
-########### SVN repository information ###################
-# $Date$
-# $Author$
-# $Revision$
-# $URL$
-# $Id$
-########### SVN repository information ###################
- -->
+
 <SASroot version="1.0"
 		xmlns="cansas1d/1.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

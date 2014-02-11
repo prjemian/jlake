@@ -1,12 +1,4 @@
 
-//########### SVN repository information ###################
-//# $Date$
-//# $Author$
-//# $Revision$
-//# $URL$
-//# $Id$
-//########### SVN repository information ###################
-
 package gov.anl.aps.small_angle.jlake;
 
 import java.util.HashMap;
